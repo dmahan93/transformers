@@ -443,6 +443,7 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
         self,
         input_ids: Optional[torch.LongTensor] = None,
         attention_mask: Optional[torch.FloatTensor] = None,
+        token_type_ids: Optional[torch.LongTensor] = None,
         head_mask: Optional[torch.FloatTensor] = None,
         inputs_embeds: Optional[torch.FloatTensor] = None,
         past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
@@ -476,6 +477,9 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
             input_shape = inputs_embeds.size()[:-1]
         else:
             raise ValueError("You have to specify either input_ids or inputs_embeds")
+            
+        if token_type_ids is not None:
+            token_type_ids = token_type_ids.view(-1, input_shape[-1])
 
         batch_size, seq_length = input_shape
 
@@ -512,6 +516,10 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
             inputs_embeds = self.embed_in(input_ids)
 
         hidden_states = inputs_embeds
+        
+        if token_type_ids is not None:
+            token_type_embeds = self.wte(token_type_ids)
+            hidden_states = hidden_states + token_type_embeds
 
         presents = () if use_cache else None
         all_attentions = () if output_attentions else None
