@@ -1280,6 +1280,9 @@ class Blip2ForConditionalGeneration(Blip2PreTrainedModel):
         >>> generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
         >>> print(generated_text)
         two
+
+        >>> # Optional: clean up the GPU memory usage
+        >>> model.to("cpu")  # doctest: +IGNORE_RESULT
         ```"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
