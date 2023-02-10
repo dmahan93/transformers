@@ -1249,6 +1249,9 @@ class Blip2ForConditionalGeneration(Blip2PreTrainedModel):
         >>> generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
         >>> print(generated_text)
         two cats laying on a couch
+
+        >>> # Optional: clean up the GPU memory usage
+        >>> model.to("cpu")  # doctest: +IGNORE_RESULT
         ```
 
         Visual question answering (prompt = question):
